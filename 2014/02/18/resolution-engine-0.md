@@ -1,4 +1,3 @@
-
 ## Resolution Engine...
 The resolution engine is the heart of any dependency manager and it is the resolution engine of Adept that changes the game somewhat compared to it's brethren.
 
@@ -25,7 +24,7 @@ This is the opposite of what you usually see where it is the users of a library 
 Obviously, this is sad. 
 
 ### Variants
-TBD
+TODO
 
 ### Requirements
 TBD
