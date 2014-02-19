@@ -67,7 +67,7 @@ case class Requirement(id: Id, constraints: Set[Constraint])
 ```
 
 #### Artifacts
-The last part of the domain model in the core of Adept is the Artifacts.
+The last part of Adept's core domain model are the Artifacts.
 Artifacts represents the actual files that you want as a result: the jars, zips, ... what ever.
 
 Since we are talking about actual files, the metadata information also contains the locations where the files are located.
@@ -77,7 +77,7 @@ The Artifacts and ArtifactRef(erences) are linked through the unique hash (SHA-2
 
 Since we know what we want (the hash of the Artifact/ArtifactRef/file), we get 2 freebies:
 
-1. We can **NOT** care where the file comes from. This means Adept can use **multiple locations** to a file. In addition to **speeding** up downloads, this makes the resolution more resilient to failure. Currently locations are simply URLs, but in the future we will expand this so that somebody hosting Adept can easily change and manipulate locations (we will use properties for this). Our evil and cunning plan also involves adding more protocols than http, such as BitTorrent.
+1. We can **NOT** care where the file comes from. This means Adept can use **multiple locations** to a file. In addition to **speeding** up downloads, this makes the resolution more resilient to failure (because you have multiple sources). Currently locations are simply URLs, but in the future we will expand this so that somebody hosting Adept can easily change and manipulate locations (we will use properties for this). Our evil, cunning plan also involves adding more protocols than http, such as BitTorrent. Mwahahaha
 2. We never ever, EVER, have to download an artifact we already have, because we know for a fact whether we have the one we want or not (I think it is rather strange that Ivy and Maven doesn't do this as well but...). I want to say this makes Adept fast, but really it is the dependency managers that constantly re-downloads stuff that are slow so let's just say that Adept is faster :)
 
 After an Artifact has been downloaded (and verified), it's put in Adept's cache where it's stored with the hash as the filename. This is nice for Adept, because it's easy to verify the integrity of files and it is easy to look them up. It is not so nice for you though :_(, since the hashes make it hard to debug the classpaths for example, in addition some IDEs require file names to be in a certain format. That is why ArtifactRefs can have filenames. This way, a build tool can use the filename property to copy or link the cached files to separate directories with meaningful filenames.
