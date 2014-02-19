@@ -119,7 +119,7 @@ The answer lies in the way Variants are stored, which is in a versioned Git repo
 
 By convention, there will be **maximum** one **compatible** Variant per commit. So for a given commit, you could for example have 2 variants with version = 1.0.1 and 1.2.0. If there is a new release you would bump the binary-compatible one (1.0.1 is replaced with 1.0.2). 
 
-When creating a Resolver you have to specify which commits of the repositories you want to use. There is a separate file per Variant which tells Adept all the repositories it needs again. 
+When creating a Resolver you have to specify which commits of the repositories you want to use. When resolving, Adept will look up a file for each possible Variant which contains all the repositories that Variant needs. If you think Adept does some more work on the repositories here, you are right. On the other hand, you will only ever have to do look up a repository once.
 
 The take-away here though is that Adept will use the *latest* commit for a repository that is specified twice.
 
