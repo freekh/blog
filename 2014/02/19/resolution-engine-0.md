@@ -164,11 +164,16 @@ Also, have a look at the screencast below to see how it looks like when I tried 
 
 
 ### Think you are better, Punchy?
-We think there is lots of room to make the resolution engine much, much faster. Do you grok the resolution engine and think you can do better?
+Tweet your love, hate or respect by clicking the button below or by sending me a <a href="mailto:fredrik@adepthub.com">mail</a>!
 
-Have a look at <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala">the resolver</a> and its <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/test/scala/adept/resolution/ResolverTest.scala">test</a>, hack away, send us a PR and make us proud.
+If you are looking to contribute: we think there is lots of room to make the resolution engine much, much faster. 
+
+So: do you grok the resolution engine and think you can do better?
+Have a look at <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala">the resolver</a> and its <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/test/scala/adept/resolution/ResolverTest.scala">test</a>, hack away, send us a PR, make us proud!
 (We don't have any perf test harness yet so if you think you are better, you will have to find a way to prove it!)
 
-Need help to get started or think we are wrong? We are really, really, really nice guys (ehem) so don't worry and create a <a href="https://github.com/adept-dm/adept/issues">GitHub issue</a>!
+Need help to get started? We are really, really, really nice guys (ehem) so don't worry and create a <a href="https://github.com/adept-dm/adept/issues">GitHub issue</a>!
 
 
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://adepthub.com/blog" data-via="adepthub">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
