@@ -7,4 +7,4 @@ First up is a technical article and it covers Adept's unique resolution engine.
 Next week we will be blogging about Adept's vision and the state of the union in terms of dependency management. 
 
 
-Read all about it <a href="/blog/2014/02/18/resolution-engine-0">here</a>
+Read all about it <a href="/blog/2014/02/19/resolution-engine-0">here</a>
