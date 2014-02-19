@@ -124,8 +124,9 @@ When creating a Resolver you have to specify which commits of the repositories y
 The take-away here though is that Adept will use the *latest* commit for a repository that is specified twice.
 
 Here, Adept shifts the responsibility of knowing what is considered to be the *latest* or *best* from the dependency manager to the *author*.
-This opens up a lot of doors: an author can for example rollback or deprecate Variants without messing up things for people who already are using the old commit.
-All in all, we think that is pretty cool!
+
+With more responsibility comes more power: an author can for example rollback or deprecate Variants without messing up things for people who already are using the old commit. For authors that do not really care, can just release one version after the other, committing each time.
+All in all, we think that it is pretty cool stuff!
 
 There is more to say about this, but this blog post is too long already and the implementation is still in progress so you will have to wait till next blog post.
 
