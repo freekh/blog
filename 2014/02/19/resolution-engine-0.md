@@ -92,6 +92,7 @@ case class Artifact(hash: Hash, size: Long, locations: Set[String])
 Now that we covered the boring bits (domain model I am looking at you!), let's have a look at how resolution works - Yeah!
 
 The first rule of Adept is that you only have one variant per Id.
+
 The second rule of Adept is: YOU ONLY HAVE ONE VARIANT PER ID. Ehem, sorry - got a bit carried away there...
 
 Anyways, so the resolution starts off in the <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala#L126">Resolver</a> with a bunch requirements. Adept will then take the Ids and look up all the Variants that matches the constraints.
