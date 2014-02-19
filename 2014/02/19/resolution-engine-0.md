@@ -113,7 +113,7 @@ An example can be found in the test <a href="https://github.com/adept-dm/adept/b
 To understand what's going on, imagine you require a variant A, which requires C binary-version 2.0 and any variant of B. Now, there are 2 Variants of B both requiring C. However, one requires (B 1.0.0) binary-version 1.0 and the other (B 2.0.0) binary-version 2.0. That means that there is really only one Variant B that can be used: 2.0.0, and we are resolved.
 
 #### Implications 1: Conflict Resolution
-Now you might be thinking: "Gosh, that sounds nice and simple (except perhaps that under-constrained part) and all, but most of my dependency graphs depends on more than exactly one version per module - so how the hell does Adept handle this?". 
+Now you might be thinking: "Gosh, that sure sounds nice and simple (except perhaps that under-constrained part) and all, but most of my dependency graphs depends on more than exactly one version per module - so how the hell does Adept handle this?". 
 
 The answer lies in the way Variants are stored, which is in a versioned Git repository.
 
