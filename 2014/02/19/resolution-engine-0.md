@@ -142,7 +142,7 @@ Imagine you also want to use Scala (and why wouldn't you?!?!), which means you h
 The first thing to note now is that Adept will be **over-constrained** if you specifically want a binary version of Scala that is different than the Akka Variant which is chosen. 
 ***In other words, Adept fails (in a nice manner) if you try do something wrong***
 
-The other (cooler thing) is that providing there is only one Akka Variant that is using a particular Scala library binary version, Adept will resolve because of the implicit resolve. This can be really nice for a language such as Scala (which is not backwards compatible) because you could compile different versions of your modules without having to implement your own weird naming scheme - ***Adept will find the right Variant if there is one.***
+The other (cooler) thing is that providing there is only one Akka Variant that is using a particular Scala library binary version, Adept will resolve because of the implicit resolve. This can be really nice for a language such as Scala (which is not backwards compatible) because you could compile different versions of your modules without having to implement your own weird naming scheme - ***Adept will find the right Variant if there is one.***
 
 Note: there is absolutely nothing particular here with the Scala library: you can use the same line of reasoning on any framework or library which have binary compatible matrices.
 
