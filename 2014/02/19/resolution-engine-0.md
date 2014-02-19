@@ -105,7 +105,7 @@ On the other hand, if there is more than Variant for one or more Ids, resolution
 
 #### Under-constrained
 When resolution is under-constrained, there is still a chance to resolve because there might yet be a set of Variants that is unique to the set of input Requirements. Therefore, Adept will try out all the different ways the valid Variants of all the under-constrained Ids, starting with only 1 Id, the 2 Ids etc etc.  If there is an **unique** set of Variants that resolves a set of Ids (i.e. for Ids A, B, C, there are exactly 1 variant), Adept considers the graph to be resolved. 
-We like naming things, so this process has a name which is: *implicit resolve*.
+We call this process *implicit resolve*.
 
 An example can be found in the test <a href="https://github.com/adept-dm/adept/blob/7829bf51d43f1b3dfa9897ebb3af3392f2e87d93/src/test/scala/adept/resolution/ResolverTest.scala#L265">"basic under-constrained path find"</a>.
 
