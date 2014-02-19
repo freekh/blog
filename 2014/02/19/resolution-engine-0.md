@@ -113,13 +113,13 @@ An example can be found in the test <a href="https://github.com/adept-dm/adept/b
 To understand what's going on, imagine you require a variant A, which requires C binary-version 2.0 and any variant of B. Now, there are 2 Variants of B both requiring C. However, one requires (B 1.0.0) binary-version 1.0 and the other (B 2.0.0) binary-version 2.0. That means that there is really only one Variant B that can be used: 2.0.0, and we are resolved.
 
 #### Implications 1: Conflict Resolution
-Now you might be thinking: "Gosh, that sounds nice and simple (except perhaps that under-constrained part) and all, but most of my dependency graphs depend on more than exactly one version per module - so how the hell does Adept handle this?". 
+Now you might be thinking: "Gosh, that sure sounds nice and simple (except perhaps that under-constrained part) and all, but most of my dependency graphs depend on more than exactly one version per module - so how the hell does Adept handle this?". 
 
 The answer lies in the way Variants are stored, which is in a versioned Git repository.
 
 By convention, there will be **maximum** one **compatible** Variant per commit. So for a given commit, you could for example have 2 variants with version = 1.0.1 and 1.2.0. If there is a new release you would bump the binary-compatible one (1.0.1 is replaced with 1.0.2). 
 
-When creating a Resolver you have to specify which commits of the repositories you want to use. There is a separate file per Variant which tells Adept all the repositories it needs again. 
+When creating a Resolver you have to specify which commits of the repositories you want to use. When resolving, Adept will look up a file for each possible Variant which contains all the repositories that Variant needs. If you think Adept does some more work on the repositories here, you are right. On the other hand, we save time on round-trips that would be required if this happens after a Variant has been resolved. Also you will only ever have to do look up a repository once.
 
 The take-away here though is that Adept will use the *latest* commit for a repository that is specified twice.
 
@@ -142,7 +142,7 @@ Imagine you also want to use Scala (and why wouldn't you?!?!), which means you h
 The first thing to note now is that Adept will be **over-constrained** if you specifically want a binary version of Scala that is different than the Akka Variant which is chosen. 
 ***In other words, Adept fails (in a nice manner) if you try do something wrong***
 
-The other (cooler thing) is that providing there is only one Akka Variant that is using a particular Scala library binary version, Adept will resolve because of the implicit resolve. This can be really nice for a language such as Scala (which is not backwards compatible) because you could compile different versions of your modules without having to implement your own weird naming scheme - ***Adept will find the right Variant if there is one.***
+The other (cooler) thing is that providing there is only one Akka Variant that is using a particular Scala library binary version, Adept will resolve because of the implicit resolve. This can be really nice for a language such as Scala (which is not backwards compatible) because you could compile different versions of your modules without having to implement your own weird naming scheme - ***Adept will find the right Variant if there is one.***
 
 Note: there is absolutely nothing particular here with the Scala library: you can use the same line of reasoning on any framework or library which have binary compatible matrices.
 
