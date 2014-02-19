@@ -29,7 +29,7 @@ A library author might for example involuntary introduce a binary incompatibilit
 
 Neither approach is particularly pleasant, which is why we think that Adept's approach is better.
 
-Attributes can be other things than just versions as well, because the actual **matching** in Adept *redonkulously* simple and **only does equality**. If you want binary version 2.2, that is what you're getting.
+Attributes can be other things than just versions as well, because the actual **matching** in Adept is *redonkulously* simple and **only does equality**. If you want binary version 2.2, that is what you're getting.
 In the same way, you can get libraries with *"license"* equal to *"apache2"* or have only the ones with *"QA department seal of approval"* equal to *"approved"*.
 
 These attributes can also have several values. Imagine you require binary version 7 and binary version 6 of Java for example. 
@@ -42,9 +42,9 @@ case class Attribute(name: String, values: Set[String])
 ```
 
 ### Variants & The Domain Model
-Up until now we have been mentioning variants, but we haven't actually said what we mean with it - shame on me! 
+Up until now we have been mentioning variants, but we haven't actually said what we mean by it - shame on me! 
 
-A Variant is the "atom" of Adept, in the sense that it's sort of the basic unit. They contain the information needed to find all of their dependencies and artifacts (files, jars, ...).  Specifically, a Variant defines an Id (something like: com.typesafe.akka/akka-actor), it's Attributes, a bunch of Artifacts and some Requirements.
+A Variant is the "atom" of Adept, in the sense that it's sort of the basic unit. They contain the information needed to find all of their dependencies and artifacts (files, jars, ...).  Specifically, a Variant defines an Id (something like: com.typesafe.akka/akka-actor), its Attributes, a bunch of Artifacts and some Requirements.
 In many other dependency managers, a Variant would be a "version" of a module, but in Adept it would not make sense because you can have many Variants that have the same "version" attribute.
 
 Here's how the code looks like (we will cover the rest of the classes below):
@@ -77,10 +77,10 @@ The Artifacts and ArtifactRef(erences) are linked through the unique hash (SHA-2
 
 Since we know what we want (the hash of the Artifact/ArtifactRef/file), we get 2 freebies:
 
-1. We can **NOT** care where the file comes from. This means Adept can use **multiple locations** to a file. In addition to **speeding** up downloads, this makes the resolution more resilient to failure (because you have multiple sources). Currently locations are simply URLs, but in the future we will expand this so that somebody hosting Adept can easily change and manipulate locations (we will use properties for this). Our evil, cunning plan also involves adding more protocols than http, such as BitTorrent. Mwahahaha
-2. We never ever, EVER, have to download an artifact we already have, because we know for a fact whether we have the one we want or not (I think it is rather strange that Ivy and Maven doesn't do this as well but...). I want to say this makes Adept fast, but really it is the dependency managers that constantly re-downloads stuff that are slow so let's just say that Adept is faster :)
+1. We can **NOT** care where the file comes from. This means Adept can use **multiple locations** for a file. In addition to **speeding** up downloads, this makes the resolution more resilient to failure (because you have multiple sources). Currently locations are simply URLs, but in the future we will expand this so that somebody hosting Adept can easily change and manipulate locations (we will use properties for this). Our evil, cunning plan also involves adding more protocols than http, such as BitTorrent. Mwahahaha
+2. We never ever, EVER, have to download an artifact we already have, because we know for a fact whether we have the one we want or not (I think it is rather strange that Ivy and Maven don't do this as well but...). I want to say this makes Adept fast, but really it is the dependency managers that constantly re-download stuff that are slow so let's just say that Adept is faster :)
 
-After an Artifact has been downloaded (and verified), it's put in Adept's cache where it's stored with the hash as the filename. This is nice for Adept, because it's easy to verify the integrity of files and it is easy to look them up. It is not so nice for you though :_(, since the hashes make it hard to debug the classpaths for example, in addition some IDEs require file names to be in a certain format. That is why ArtifactRefs can have filenames. This way, a build tool can use the filename property to copy or link the cached files to separate directories with meaningful filenames.
+After an Artifact has been downloaded (and verified), it's put in Adept's cache where it's stored with the hash as the filename. This is nice for Adept, because it's easy to verify the integrity of files and it is easy to look them up. It is not so nice for you though :_(, since the hashes make it hard to debug the classpaths for example, in addition some IDEs require file names to be on a certain format. That is why ArtifactRefs can have filenames. This way, a build tool can use the filename property to copy or link the cached files to separate directories with meaningful filenames.
 
 ```scala
 case class ArtifactRef(hash: Hash, attributes: Set[Attribute], filename: Option[String])
@@ -95,17 +95,17 @@ The first rule of Adept is that you only have one variant per Id.
 
 The second rule of Adept is: YOU ONLY HAVE ONE VARIANT PER ID. Ehem, sorry - got a bit carried away there...
 
-Anyways, so the resolution starts off in the <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala#L126">Resolver</a> with a bunch requirements. Adept will then take the Ids and look up all the Variants that matches the constraints.
-If there is a **unique Variant for a give Id**, the resolver continues and looks at all of the requirements of that Variant.
+Anyways, so the resolution starts off in the <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala#L126">Resolver</a> with a bunch requirements. Adept will then take the Ids and look up all the Variants that match the constraints.
+If there is a **unique Variant for a given Id**, the resolver continues and looks at all of the requirements of that Variant.
 
-Resolution is successful when every (transitive) Id has exactly one Variant. There is beauty in simplicity and we think that this is as simple it can be (in fact it is implemented on ~215 LOC including comments).
+Resolution is successful when every (transitive) Id has exactly one Variant. There is beauty in simplicity and we think that this is as simple it can be (in fact it is implemented in ~215 LOC including comments).
 
 If no Variants are found for one or more Ids, we say that resolution is **over-constrained** (too... many... con... straints).
 
-On the other hand, if there is more than Variant for one or more Ids, resolution is **under-constrained** (not enough Constraints).
+On the other hand, if there is more than one Variant for one or more Ids, resolution is **under-constrained** (not enough Constraints).
 
 #### Under-constrained
-When resolution is under-constrained, there is still a chance to resolve because there might yet be a set of Variants that is unique to the set of input Requirements. Therefore, Adept will try out all the different ways the valid Variants of all the under-constrained Ids, starting with only 1 Id, the 2 Ids etc etc.  If there is an **unique** set of Variants that resolves a set of Ids (i.e. for Ids A, B, C, there are exactly 1 variant), Adept considers the graph to be resolved. 
+When resolution is under-constrained, there is still a chance to resolve because there might yet be a set of Variants that is unique to the set of input Requirements. Therefore, Adept will try out all the different ways the valid Variants of all the under-constrained Ids, starting with only 1 Id, the 2 Ids etc etc.  If there is a **unique** set of Variants that resolves a set of Ids (i.e. for Ids A, B, C, there are exactly 1 variant), Adept considers the graph to be resolved. 
 We call this process *implicit resolve*.
 
 An example can be found in the test <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/test/scala/adept/resolution/ResolverTest.scala#L265">"basic under-constrained path find"</a>.
@@ -113,7 +113,7 @@ An example can be found in the test <a href="https://github.com/adept-dm/adept/b
 To understand what's going on, imagine you require a variant A, which requires C binary-version 2.0 and any variant of B. Now, there are 2 Variants of B both requiring C. However, one requires (B 1.0.0) binary-version 1.0 and the other (B 2.0.0) binary-version 2.0. That means that there is really only one Variant B that can be used: 2.0.0, and we are resolved.
 
 #### Implications 1: Conflict Resolution
-Now you might be thinking: "Gosh, that sure sounds nice and simple (except perhaps that under-constrained part) and all, but most of my dependency graphs depends on more than exactly one version per module - so how the hell does Adept handle this?". 
+Now you might be thinking: "Gosh, that sure sounds nice and simple (except perhaps that under-constrained part) and all, but most of my dependency graphs depend on more than exactly one version per module - so how the hell does Adept handle this?". 
 
 The answer lies in the way Variants are stored, which is in a versioned Git repository.
 
@@ -125,10 +125,10 @@ The take-away here though is that Adept will use the *latest* commit for a repos
 
 Here, Adept shifts the responsibility of knowing what is considered to be the *latest* or *best* from the dependency manager to the *author*.
 
-With more responsibility comes more power: an author can for example rollback or deprecate Variants without messing up things for people who already are using the old commit. For authors that do not really care, can just release one version after the other, committing each time.
-All in all, we think that it is pretty cool stuff!
+With more responsibility comes more power: an author can for example rollback or deprecate Variants without messing up things for people who already are using the old commit. Authors who do not really care on the other hand, can just release one version after the other, committing each time.
+All in all, we think that this is pretty cool stuff!
 
-There is more to say about this, but this blog post is too long already and the implementation is still in progress so you will have to wait till next blog post.
+There is more to say about this, but this blog post is too long already and the implementation is still in progress so you will have to wait till the next blog post.
 
 #### Implications 2: Knowing What Works With What
 Now you should be able to see how Adept can know how libraries are compatible, but if you couldn't (you bozo!) let's take an example to illustrate.
@@ -149,13 +149,12 @@ Note: there is absolutely nothing particular here with the Scala library: you ca
 ### TL;DR;
 Adept **rocks**! :P
 
-It is the last dependency manager you (or your build tool) will ever need, because it's resolution engine is simple yet powerful and does everything Ivy, Maven et al. does and a bunch of stuff that they can't do such: resolving (and discovering) compatible libraries being one thing.
-
+It is the last dependency manager you (or your build tool) will ever need, because its resolution engine is simple yet powerful and does everything Ivy, Maven et al. do and a bunch of stuff that they can't do, such as: resolving (and discovering) compatible libraries being one thing.
 
 The resolution engine is "finished" and we are/I am working on how repositories are handled next week. After this way we will follow up with another post on why Adept is reliable. 
 In the future we will also follow up with a post that shows how Adept can natively handle Ivy Configurations (Maven Scopes).
 
-Also, have a look at the screencast below to see how it looks like when I tried out the sbt plugin:
+Also, have a look at the screencast below to see what it looked like when I tried out the sbt plugin:
 
 <div style="margin:auto; text-align:center;">
 <iframe width="400" height="315" src="//www.youtube.com/embed/5WLSyJBKfbU" frameborder="0" allowfullscreen></iframe>
