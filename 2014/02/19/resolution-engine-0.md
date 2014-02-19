@@ -94,7 +94,7 @@ Now that we covered the boring bits (domain model I am looking at you!), let's h
 The first rule of Adept is that you only have one variant per Id.
 The second rule of Adept is: YOU ONLY HAVE ONE VARIANT PER ID. Ehem, sorry - got a bit carried away there...
 
-Anyways, so the resolution starts off in the <a href="https://github.com/adept-dm/adept/blob/7829bf51d43f1b3dfa9897ebb3af3392f2e87d93/src/main/scala/adept/resolution/Resolver.scala#L126">Resolver</a> with a bunch requirements. Adept will then take the Ids and look up all the Variants that matches the constraints.
+Anyways, so the resolution starts off in the <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala#L126">Resolver</a> with a bunch requirements. Adept will then take the Ids and look up all the Variants that matches the constraints.
 If there is a **unique Variant for a give Id**, the resolver continues and looks at all of the requirements of that Variant.
 
 Resolution is successful when every (transitive) Id has exactly one Variant. There is beauty in simplicity and we think that this is as simple it can be (in fact it is implemented on ~215 LOC including comments).
@@ -107,7 +107,7 @@ On the other hand, if there is more than Variant for one or more Ids, resolution
 When resolution is under-constrained, there is still a chance to resolve because there might yet be a set of Variants that is unique to the set of input Requirements. Therefore, Adept will try out all the different ways the valid Variants of all the under-constrained Ids, starting with only 1 Id, the 2 Ids etc etc.  If there is an **unique** set of Variants that resolves a set of Ids (i.e. for Ids A, B, C, there are exactly 1 variant), Adept considers the graph to be resolved. 
 We call this process *implicit resolve*.
 
-An example can be found in the test <a href="https://github.com/adept-dm/adept/blob/7829bf51d43f1b3dfa9897ebb3af3392f2e87d93/src/test/scala/adept/resolution/ResolverTest.scala#L265">"basic under-constrained path find"</a>.
+An example can be found in the test <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/test/scala/adept/resolution/ResolverTest.scala#L265">"basic under-constrained path find"</a>.
 
 To understand what's going on, imagine you require a variant A, which requires C binary-version 2.0 and any variant of B. Now, there are 2 Variants of B both requiring C. However, one requires (B 1.0.0) binary-version 1.0 and the other (B 2.0.0) binary-version 2.0. That means that there is really only one Variant B that can be used: 2.0.0, and we are resolved.
 
@@ -164,7 +164,7 @@ Also, have a look at the screencast below to see how it looks like when I tried 
 ### Think you are better, Punchy?
 We think there is lots of room to make the resolution engine much, much faster. Do you grok the resolution engine and think you can do better?
 
-Have a look at <a href="https://github.com/adept-dm/adept/blob/7829bf51d43f1b3dfa9897ebb3af3392f2e87d93/src/main/scala/adept/resolution/Resolver.scala">the resolver</a> and its <a href="https://github.com/adept-dm/adept/blob/7829bf51d43f1b3dfa9897ebb3af3392f2e87d93/src/test/scala/adept/resolution/ResolverTest.scala">test</a>, hack away, send us a PR and make us proud.
+Have a look at <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/main/scala/adept/resolution/Resolver.scala">the resolver</a> and its <a href="https://github.com/adept-dm/adept/blob/63622590f2191bb0b40fa9ad0c043299d162198a/src/test/scala/adept/resolution/ResolverTest.scala">test</a>, hack away, send us a PR and make us proud.
 (We don't have any perf test harness yet so if you think you are better, you will have to find a way to prove it!)
 
 Need help to get started or think we are wrong? We are really, really, really nice guys (ehem) so don't worry and create a <a href="https://github.com/adept-dm/adept/issues">GitHub issue</a>!
